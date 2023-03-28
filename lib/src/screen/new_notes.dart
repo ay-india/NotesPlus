@@ -1,5 +1,5 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,6 +11,7 @@ class NewNotes extends StatefulWidget {
 }
 
 class _NewNotesState extends State<NewNotes> {
+  final firestore = FirebaseFirestore.instance.collection('notes');
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
   String t = "";
@@ -20,7 +21,7 @@ class _NewNotesState extends State<NewNotes> {
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(top: 30.h),
-        padding: EdgeInsets.all(13.r),
+        padding: EdgeInsets.all(16.r),
         // color: Colors.red,
         child: Column(children: [
           Container(
@@ -35,15 +36,36 @@ class _NewNotesState extends State<NewNotes> {
                     Navigator.pop(context);
                   }),
                 ),
-                Icon(Icons.done_outlined),
+                InkWell(
+                    onTap: () {
+                      if (t.isNotEmpty || n.isNotEmpty) {
+                        String id =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+                        firestore
+                            .doc(id)
+                            .set({
+                              'id':id,
+                              'title': t,
+                              'notes': n,
+                              'date': DateFormat('dd-MM-yyyy – kk:mm:ss')
+                                  .format(DateTime.now())
+                                  .toString(),
+                            })
+                            .then((value) {})
+                            .onError((error, stackTrace) {});
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Icon(Icons.done_outlined)),
               ],
             ),
           ),
+          Divider(),
           TextField(
-            onChanged: (value) => t=value,
+            onChanged: (value) => t = value,
             controller: title,
             style: TextStyle(
-              fontSize: 25.sp,
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -54,16 +76,19 @@ class _NewNotesState extends State<NewNotes> {
                 border: InputBorder.none,
                 hintText: 'Title',
                 hintStyle:
-                    TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold)),
+          ),
+          Divider(
+            thickness: 2,
           ),
           SizedBox(
-            height: 16.h,
+            height: 10.h,
           ),
           TextField(
-            onChanged: (value) => n=value,
+            onChanged: (value) => n = value,
             controller: notes,
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 18.sp,
               // fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 36, 34, 34),
             ),
@@ -71,15 +96,8 @@ class _NewNotesState extends State<NewNotes> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             decoration: InputDecoration.collapsed(
-              hintText: 'notes',
+              hintText: 'Notes',
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              print(t);
-              print(n);
-            },
-            child: Text('check'),
           ),
         ]),
       ),

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1037491621608",
+    "project_id": "justnotes-45bbf",
+    "storage_bucket": "justnotes-45bbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037491621608:android:1a4b8f4475db3a0b9d835d",
+        "android_client_info": {
+          "package_name": "com.example.notes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037491621608-cm16dpab3gs1bhltuefodd4c9qdr5spk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOAQTp0sNQmQpM55cnVyY2nLLgTqrG0Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037491621608-cm16dpab3gs1bhltuefodd4c9qdr5spk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
