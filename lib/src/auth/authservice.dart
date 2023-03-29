@@ -60,6 +60,7 @@ class AuthService {
         await GoogleSignIn(scopes: <String>["email"]).signOut();
     // await googleUser.signOut();
     FirebaseAuth.instance.signOut().then((value) {
+      
       Navigator.pushNamedAndRemoveUntil(
           context, RouteName.signInPage, (route) => false);
       Utils().toastMessage('Logged out successfully');
