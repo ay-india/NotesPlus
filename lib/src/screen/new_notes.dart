@@ -4,14 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NewNotes extends StatefulWidget {
-  const NewNotes({super.key});
+  String collectionId;
+
+  NewNotes({super.key, required this.collectionId});
 
   @override
-  State<NewNotes> createState() => _NewNotesState();
+  State<NewNotes> createState() => _NewNotesState(collectionId: collectionId);
 }
 
 class _NewNotesState extends State<NewNotes> {
-  final firestore = FirebaseFirestore.instance.collection('notes');
+  String collectionId;
+  _NewNotesState({required this.collectionId});
+  
+  late CollectionReference<Map<String, dynamic>> firestore =
+      FirebaseFirestore.instance.collection(collectionId.toString());
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
   String t = "";
@@ -44,7 +50,7 @@ class _NewNotesState extends State<NewNotes> {
                         firestore
                             .doc(id)
                             .set({
-                              'id':id,
+                              'id': id,
                               'title': t,
                               'notes': n,
                               'date': DateFormat('dd-MM-yyyy – kk:mm:ss')

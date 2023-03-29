@@ -7,21 +7,32 @@ class ViewNotes extends StatefulWidget {
   String title;
   String notes;
   int i;
+  String collectionId;
   ViewNotes(
-      {super.key, required this.notes, required this.title, required this.i});
+      {super.key,
+      required this.notes,
+      required this.title,
+      required this.i,
+      required this.collectionId});
 
   @override
-  State<ViewNotes> createState() =>
-      _ViewNotesState(nnotes: notes, tit: title, i: i);
+  State<ViewNotes> createState() => _ViewNotesState(
+      nnotes: notes, tit: title, i: i, collectionId: collectionId);
 }
 
 class _ViewNotesState extends State<ViewNotes> {
+  String collectionId;
   String tit;
   String nnotes;
   int i;
-  _ViewNotesState({required this.nnotes, required this.tit, required this.i});
-  final firestore = FirebaseFirestore.instance
-      .collection('notes')
+  _ViewNotesState(
+      {required this.nnotes,
+      required this.tit,
+      required this.i,
+      required this.collectionId});
+  late Stream<QuerySnapshot<Map<String, dynamic>>> firestore = FirebaseFirestore
+      .instance
+      .collection(collectionId)
       .orderBy('date', descending: true)
       .snapshots();
   CollectionReference ref = FirebaseFirestore.instance.collection('notes');
@@ -71,7 +82,13 @@ class _ViewNotesState extends State<ViewNotes> {
                         InkWell(
                             onTap: () {
                               print(t);
-                              if (t.isNotEmpty || n.isNotEmpty) {
+                              if (t.isEmpty && n.isEmpty) {
+                                ref
+                                    .doc(
+                                        snapshot.data!.docs[i]['id'].toString())
+                                    .delete();
+                                Navigator.pop(context);
+                              } else if (t.isNotEmpty || n.isNotEmpty) {
                                 String id = DateTime.now()
                                     .millisecondsSinceEpoch
                                     .toString();

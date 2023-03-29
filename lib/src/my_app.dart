@@ -1,7 +1,11 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:notes_app/src/screen/sign_in_page.dart';
+
 import 'package:notes_app/src/util/app_constant.dart';
+import 'package:notes_app/src/util/routes.dart';
+import 'auth/authservice.dart';
 import 'screen/home_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -28,7 +32,9 @@ class MyApp extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
                   theme: theme,
                   // darkTheme: darkTheme,
-                  home: HomePage(),
+                  home: AuthService().handleAuthState(),
+                  // initialRoute: AuthService().handleAuthState(),
+                  onGenerateRoute: Routes.generateRoute,
                 );
               });
         });
