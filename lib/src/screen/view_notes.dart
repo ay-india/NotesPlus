@@ -35,7 +35,8 @@ class _ViewNotesState extends State<ViewNotes> {
       .collection(collectionId)
       .orderBy('date', descending: true)
       .snapshots();
-  CollectionReference ref = FirebaseFirestore.instance.collection('notes');
+  late CollectionReference<Map<String, dynamic>> ref =
+      FirebaseFirestore.instance.collection(collectionId.toString());
   TextEditingController title = TextEditingController();
   TextEditingController notes = TextEditingController();
 
@@ -83,10 +84,14 @@ class _ViewNotesState extends State<ViewNotes> {
                             onTap: () {
                               print(t);
                               if (t.isEmpty && n.isEmpty) {
+                                print('deleted');
                                 ref
                                     .doc(
                                         snapshot.data!.docs[i]['id'].toString())
-                                    .delete();
+                                    .delete()
+                                    .then((value) => print('database deleted'))
+                                    .onError(
+                                        (error, stackTrace) => print('error'));
                                 Navigator.pop(context);
                               } else if (t.isNotEmpty || n.isNotEmpty) {
                                 String id = DateTime.now()
